@@ -11,7 +11,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter{
-
+//로그인 필터 클래스인디 그런데 UsernamePasswordAuthenticationFilter를 상속받은
+    
     //주입받기 위해서 생성
     private final AuthenticationManager authenticationManager;
 
@@ -33,7 +34,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter{
         //꺼낸값으로 인증 진행할것임 UsernamePasswordAuthenticationFilter가 autenticationManager한테  username,password를 던져줌
         //그냥 던져주는게 아니고 dto라는 바구니에 담아서 던져주는것임
         //바구니가 UserNamePassowrdauthenticationToken에 username,password를 담아서 최종적으로 authenticationManager한테 전달
-
         //token객체 생성해서 담음
         UsernamePasswordAuthenticationToken authToken=new UsernamePasswordAuthenticationToken(username,password,null);
 
@@ -44,12 +44,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter{
     //로그인 성공시 실행하는 메소드 -> 여기서 jwt 발급하면 됨
     @Override
     protected  void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,Authentication authentication){
-
+        System.out.println("success");
     }
 
     //로그인 실패시 실행하는 메소드
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-
+        System.out.println("fail");
     }
 }
