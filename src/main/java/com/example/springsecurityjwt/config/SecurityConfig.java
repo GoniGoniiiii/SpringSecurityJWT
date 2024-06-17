@@ -1,5 +1,6 @@
 package com.example.springsecurityjwt.config;
 
+import com.example.springsecurityjwt.jwt.JWTUtil;
 import com.example.springsecurityjwt.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,11 +21,15 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration){
+    private final JWTUtil jwtUtil;
+
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration,JWTUtil jwtUtil){
         //SecurityConfig : Spring Security 설정을 구성하는 클래스
         //SecurityConfig 클래스는 AuthenticationConfiguration을 인자로 받는 생성자를 정의
         this.authenticationConfiguration = authenticationConfiguration;
+        this.jwtUtil=jwtUtil;
     }
+
     //AuthenticationConfiguration : Spring Security에서 제공하는 구성 클래스 중 하나 , 인증관련 구성을 설정하기위해 사용
     //사용자의 인증방법 및 사용자 정보를 검색하는 방법과 같은 세부적인 사항을 구성하는데 사용
     //Spring Security의 구성을 커스터마이징하고 보안 요구 사항에 맞게 조정하는데 도움
@@ -98,8 +103,10 @@ public class SecurityConfig {
 //        LoginFilter : 사용자의 로그인을 처리하는 필터 / 사용자가 제출한 로그인 정보를 처리하고 인증을 시도
 //        UsernamePasswordAuthenticationFilter : 기본적으로 사용자의 아이디와 비밀번호를 인증하기 위한 Spring Security의 필터
 //        로그인 필터가 이전에 추가되므로, 사용자의 로그인 요청이 먼저 처리
+
+        //user
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
 
         
