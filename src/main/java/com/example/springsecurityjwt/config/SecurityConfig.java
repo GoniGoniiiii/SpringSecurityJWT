@@ -1,5 +1,6 @@
 package com.example.springsecurityjwt.config;
 
+import com.example.springsecurityjwt.jwt.JWTFilter;
 import com.example.springsecurityjwt.jwt.JWTUtil;
 import com.example.springsecurityjwt.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
@@ -99,14 +100,17 @@ public class SecurityConfig {
 //        그렇기때문에 SecurityConfig클래스에도 등록을 해줘야됨
 //
 //        addFilterAt : 지정된 위치에 필터를 추가
+        http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+
+
 //        LoginFilter를 UsernamePasswordAuthenticationFilter 이전에 추가하고 있음.
 //        LoginFilter : 사용자의 로그인을 처리하는 필터 / 사용자가 제출한 로그인 정보를 처리하고 인증을 시도
 //        UsernamePasswordAuthenticationFilter : 기본적으로 사용자의 아이디와 비밀번호를 인증하기 위한 Spring Security의 필터
 //        로그인 필터가 이전에 추가되므로, 사용자의 로그인 요청이 먼저 처리
-
         //user
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class);
+
 
 
         
