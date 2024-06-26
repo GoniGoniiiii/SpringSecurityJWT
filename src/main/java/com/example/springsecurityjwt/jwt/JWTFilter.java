@@ -2,6 +2,7 @@ package com.example.springsecurityjwt.jwt;
 
 import com.example.springsecurityjwt.dto.CustomUserDetails;
 import com.example.springsecurityjwt.entity.UserEntity;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,8 +52,15 @@ public class JWTFilter  extends OncePerRequestFilter {
 
             //조건이 해당되면 메소드 종료(필수)ㄴ
             return ;
+//            try{
+//                jwtUtil.isExpired(token);
+//            }catch (ExpiredJwtException e){
+//                System.out.println("token expired");
+//                filterChain.doFilter(request,response);
+//                return;
+//            }
         }
-        
+
         //토큰에서 username과 role획득
         String username=jwtUtil.getUsername(token);
         String role=jwtUtil.getRole(token);
@@ -79,7 +87,7 @@ public class JWTFilter  extends OncePerRequestFilter {
 
 
 
-        
+
 
     }
 }

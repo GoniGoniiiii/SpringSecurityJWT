@@ -3,6 +3,8 @@ package com.example.springsecurityjwt.config;
 import com.example.springsecurityjwt.jwt.JWTFilter;
 import com.example.springsecurityjwt.jwt.JWTUtil;
 import com.example.springsecurityjwt.jwt.LoginFilter;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +16,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -73,6 +80,34 @@ public class SecurityConfig {
         //메소드 체인 구조를 유지하면서 Spring Security의 다양한 보안설정을 구성할 수 있도록 함.
         //메소드 체인은 여러 보안 설정을 단계적으로 적용할 수 있도록 해주는데, 각 메소드가 이전 메소드의 결과를 기반으로 동작하기 때문에 'auth' 변수를 통해 설정을 연속적으로 적용할 수 있음.
         //보안 구성을 관리하고 다양한 메소드들을 연결하여 호출하는데 사용되는 중요한 요소이며, 개발자는 이를 통해 복잡한 보안 구성을 보다 쉽게 구현 가능함.
+
+        http
+                .cors((cors) -> cors
+                        .configurationSource(new CorsConfigurationSource() {
+                            @Override
+                            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+
+                                CorsConfiguration configuration=new CorsConfiguration();
+
+                                //허용할 프론트엔드쪽 서버에서 데이터를 보낼거기 때문에 3000번대 포트 허용
+                                configuration.setAllowedOrigins(Collections.singletonList("localhost:3000"));
+                                //허용할 메소드 get,post,등등 모든 메소드 허용
+                                configuration.setAllowedMethods(Collections.singletonList("*"));
+                                //프론트에서 Credential 설정을 하면 true로 바꿔줘야된대
+                                configuration.setAllowCredentials(true);
+                                //허용할 헤더
+                                configuration.setAllowedHeaders(Collections.singletonList("*"));
+                                //시간
+                                configuration.setMaxAge(3600L);
+
+                                //백에서 사용자 클라이언트단으로 header를 보내줄때 authorization에 jwt를 넣어서 보내줄거기때문에  authorization header도 허용을 시켜줘야함
+                                configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+
+
+                                return configuration;
+                            }
+                        }));
+
         http
                 .csrf((auth) -> auth.disable());
 
@@ -92,7 +127,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth)-> auth     //특정한 경로에 대한 인가작업
                         .requestMatchers("/login","/","join").permitAll() //모든 사용자에게 접근 허용
-                       .anyRequest().authenticated());  // 그 외의 모든 요청에 대해새너는 인증된 사용자만 접근을 허함 -> 로그인한 사용자에게만 해당 경로에 접근을 허용
+                       .anyRequest().authenticated());  // 그 외의 모든 요청에 대해서는 인증된 사용자만 접근을 허함 -> 로그인한 사용자에게만 해당 경로에 접근을 허용
 
         
 //        at :원하는 자리에 등록 ,before:해당하는 필터 전에 등록 , after :특정한 필터 이후에 등록
@@ -109,7 +144,7 @@ public class SecurityConfig {
 //        로그인 필터가 이전에 추가되므로, 사용자의 로그인 요청이 먼저 처리
         //user
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
 
 

@@ -29,8 +29,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter{
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-
-
         //클라이언트 요청해서 username,password 추출
         String username=obtainUsername(request);
         String password=obtainPassword(request);
@@ -65,7 +63,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter{
 
         String role=auth.getAuthority();
 
-        String token=jwtUtil.createJWT(username,role,60*60*10L);
+        String token=jwtUtil.createJWT(username,role,60*60*100000L);
         
         //HTTP 인증방식은 RFC 7235의 정의에 따라 아래와 같은 형태를 가져야한대
         response.addHeader("Authorization", "Bearer " + token);
