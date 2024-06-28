@@ -145,10 +145,6 @@ public class SecurityConfig {
         //user
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
-
-
-
-        
         //세션 설정(STATELESS상태로 두는게 중요!)
 //        sessionManagement : 세션관리를 구성
 //        현재는 Session을 StateLess로 설정 -> 세션을 서버에서 관리하지않고 클라이언트가 모든 필요한 정보를 포함하는 요청을 보내도록 하는것
@@ -157,7 +153,7 @@ public class SecurityConfig {
 //        sessionCreationPolicy() : Spring Security에서 세션 생성 정책을 구성하는데 사용 / 세션 관리 방식을 지정하며, 다양한 옵션 설정 가능
 //        1. ALWAYS : 항상 세션을 설정(기본값)
 //        2. NEVER : 세션을 생성하지 않음
-//        3. IF_REQUIRED : 필요할 때만 세션을 생성(기본값)
+//        3. IF_REQUIRED : 필s요할 때만 세션을 생성(기본값)
 //        4. STATELESS : 세션을 사용하지 않고, 모든 요청은 서버에 상태르 유지하지 않음.
         http
                 .sessionManagement((session) -> session
