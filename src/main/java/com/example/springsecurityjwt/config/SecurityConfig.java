@@ -127,6 +127,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth)-> auth     //특정한 경로에 대한 인가작업
                         .requestMatchers("/login","/","join").permitAll() //모든 사용자에게 접근 허용
+                        .requestMatchers("/admin").hasRole("ADMIN")
                        .anyRequest().authenticated());  // 그 외의 모든 요청에 대해서는 인증된 사용자만 접근을 허함 -> 로그인한 사용자에게만 해당 경로에 접근을 허용
 
         

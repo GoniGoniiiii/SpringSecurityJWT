@@ -32,7 +32,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter{
         //클라이언트 요청해서 username,password 추출
         String username=obtainUsername(request);
         String password=obtainPassword(request);
-
         System.out.println(username);
 
         //꺼낸값으로 인증 진행할것임 UsernamePasswordAuthenticationFilter가 autenticationManager한테  username,password를 던져줌
@@ -40,7 +39,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter{
         //바구니가 UserNamePassowrdauthenticationToken에 username,password를 담아서 최종적으로 authenticationManager한테 전달
         //token객체 생성해서 담음
         UsernamePasswordAuthenticationToken authToken=new UsernamePasswordAuthenticationToken(username,password,null);
-
         return authenticationManager.authenticate(authToken);
 
     }
@@ -67,7 +65,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter{
         
         //HTTP 인증방식은 RFC 7235의 정의에 따라 아래와 같은 형태를 가져야한대
         response.addHeader("Authorization", "Bearer " + token);
-
     }
 
     //로그인 실패시 실행하는 메소드

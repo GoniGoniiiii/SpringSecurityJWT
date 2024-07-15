@@ -61,7 +61,7 @@ public class JWTUtil { //jWt를 검증할 메소드와 jwtUtil을 생성할 메�
                 .claim("username",username)
                 .claim("role",role)
                 .issuedAt(new Date(System.currentTimeMillis())) //현재 발행시간 추가해줌
-                .expiration(new Date(System.currentTimeMillis()+expiredMs)) //토큰이 언제 소멸할지
+                .expiration(new Date(System.currentTimeMillis()+expiredMs)) //토큰이 언제 소멸할지ㄴ
                 .signWith(secretKey) //암호화 진행
                 .compact();
     }
